@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Question", menuName = "Quiz/Question")]
@@ -21,5 +22,10 @@ public class QuestionSO : ScriptableObject
     public string GetCorrectAnswer()
     {
         return answers[correctAnswerIndex];
+    }
+
+    internal int GetCorrectAnswerIndex()
+    {
+        return correctAnswerIndex;
     }
 }
