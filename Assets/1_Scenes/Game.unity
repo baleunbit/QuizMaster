@@ -157,6 +157,7 @@ MonoBehaviour:
   solutionTime: 3
   isProblemTime: 1
   fillAmount: 0
+  loadNextQuestion: 0
 --- !u!4 &124844424
 Transform:
   m_ObjectHideFlags: 0
@@ -375,8 +376,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -85, y: -113}
-  m_SizeDelta: {x: 1024, y: 1024}
+  m_AnchoredPosition: {x: -88, y: -121}
+  m_SizeDelta: {x: 190.5422, y: 190.5422}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &332725393
 MonoBehaviour:
@@ -403,7 +404,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -1949,18 +1950,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionText: {fileID: 1316847353}
   question: {fileID: 11400000, guid: b84ebb5c0a0f3ba4a952716b468992d0, type: 2}
-  answerTextArr:
-  - {fileID: 571770827}
-  - {fileID: 1520318345}
-  - {fileID: 2100355764}
-  - {fileID: 1496305829}
   answerButtons:
   - {fileID: 49974657}
   - {fileID: 1132207055}
   - {fileID: 1663084201}
   - {fileID: 1975742153}
+  answerTextArr:
+  - {fileID: 571770827}
+  - {fileID: 1520318345}
+  - {fileID: 2100355764}
+  - {fileID: 1496305829}
   defaultAnswerSprite: {fileID: 21300000, guid: 4f67cb3f4d8751d479cc166ec0542e48, type: 3}
   correctAnswerSprite: {fileID: 21300000, guid: bad50fb7ee62fc8499d9e146d1c28623, type: 3}
+  timerImage: {fileID: 332725393}
+  problemTimerSprite: {fileID: 801340330791846111, guid: ba5596b1e5417904eaae0c0464695663, type: 3}
+  solutionTimerSprite: {fileID: -5384725055999689231, guid: c02a1fa026d17924cbcbbdf43e628299, type: 3}
 --- !u!114 &2100355764 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4915716856002196238, guid: e2389760d9ebf4a45a72f2bd0e991daf, type: 3}

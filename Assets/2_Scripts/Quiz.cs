@@ -5,16 +5,51 @@ using UnityEngine.UI;
 
 public class Quiz : MonoBehaviour
 {
+    [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] QuestionSO question;
-    [SerializeField] TextMeshProUGUI[] answerTextArr;
+
+    [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
+    [SerializeField] TextMeshProUGUI[] answerTextArr;
+
+    [Header("Button Color")]
     [SerializeField] Sprite defaultAnswerSprite;
     [SerializeField] Sprite correctAnswerSprite;
 
+    [Header("Timer")]
+    [SerializeField] Image timerImage;
+    [SerializeField] Sprite problemTimerSprite;
+    [SerializeField] Sprite solutionTimerSprite;
+    Timer timer; 
+    bool chooseAnswer = false;
+
     void Start()
     {
+        timer = FindFirstObjectByType<Timer>();
         GetNextQuestion();
+    }
+
+    private void Update()
+    {
+        timerImage.fillAmount = timer.fillAmount;
+        if (timer.isProblemTime)
+            timerImage.sprite = problemTimerSprite;
+        else
+            timerImage.sprite = solutionTimerSprite;
+        timerImage.fillAmount = timer.fillAmount;
+
+        if(timer.loadNextQuestion)
+        {
+            timer.loadNextQuestion = false;
+            GetNextQuestion();
+        }
+
+        if(timer.isProblemTime = false && !chooseAnswer == false)
+        {
+            DisplaySolution(-1);
+            // -1 means no answer selected
+        }
     }
 
     private void GetNextQuestion()
@@ -25,6 +60,7 @@ public class Quiz : MonoBehaviour
     }
     private void OnDisplayQuestion()
     {
+        Debug.Log("Display Question: " + question.GetQuestion());  
         questionText.text = question.GetQuestion();
 
         for (int i = 0; i < answerTextArr.Length; i++)
@@ -35,7 +71,14 @@ public class Quiz : MonoBehaviour
 
     public void OnAnswerButtonClicked(int index)
     {
-        if( index == question.GetCorrectAnswerIndex())
+        chooseAnswer = true;
+        DisplaySolution(index);
+        timer.CancelTimer();
+    }
+
+    private void DisplaySolution(int index)
+    {
+        if (index == question.GetCorrectAnswerIndex())
         {
             questionText.text = "정답입니다!";
             answerButtons[index].GetComponent<Image>().sprite = correctAnswerSprite;
@@ -44,9 +87,9 @@ public class Quiz : MonoBehaviour
         {
             questionText.text = $"오답입니다! 정답은 {question.GetCorrectAnswer()}입니다.";
         }
-
         SetButtonState(false);
     }
+
     private void SetDefaultButtonSprites()
     {
         foreach (GameObject obj in answerButtons)
