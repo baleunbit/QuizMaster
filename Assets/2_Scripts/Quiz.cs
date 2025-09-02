@@ -45,15 +45,15 @@ public class Quiz : MonoBehaviour
             GetNextQuestion();
         }
 
-        if(timer.isProblemTime = false && !chooseAnswer == false)
+        if (!timer.isProblemTime && chooseAnswer == false)
         {
             DisplaySolution(-1);
-            // -1 means no answer selected
         }
     }
 
     private void GetNextQuestion()
     {
+        chooseAnswer = false;
         SetButtonState(true);
         SetDefaultButtonSprites();
         OnDisplayQuestion();
