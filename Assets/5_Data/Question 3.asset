@@ -15,8 +15,8 @@ MonoBehaviour:
   question: "\uB2E4\uC74C \uC911 \uB300\uBBF8\uC9C0\uAC00 \uAC00\uC7A5 \uB192\uC740
     \uCD1D\uC740?"
   answers:
-  - 1. AKM
+  - "1. MK47 \uBBA4\uD134\uD2B8"
   - 2. ACE32
   - "3. \uBCA0\uB9B4 M762"
-  - 4. MK47
-  correctAnswerIndex: 3
+  - 4. AKM
+  correctAnswerIndex: 0

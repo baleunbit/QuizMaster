@@ -15,8 +15,8 @@ MonoBehaviour:
   question: "\uB2E4\uC74C \uC911 \uBC30\uD2C0\uADF8\uB77C\uC6B4\uB4DC \uCD1D\uAE30
     AUG\uC758 \uB300\uBBF8\uC9C0\uB294?"
   answers:
-  - 43
-  - 41
-  - 42
-  - 40
+  - 1. 43
+  - 2. 41
+  - 3. 42
+  - 4. 40
   correctAnswerIndex: 3

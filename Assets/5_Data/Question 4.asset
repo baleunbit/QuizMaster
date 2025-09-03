@@ -16,6 +16,6 @@ MonoBehaviour:
   answers:
   - 1. AUG
   - 2. M416
-  - 3. MK47
+  - "3. MK47 \uBBA4\uD134\uD2B8"
   - 4. FAMAS
   correctAnswerIndex: 2

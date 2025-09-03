@@ -46,19 +46,26 @@ public class Quiz : MonoBehaviour
 
     private void Update()
     {
-        timerImage.fillAmount = timer.fillAmount;
         if (timer.isProblemTime)
             timerImage.sprite = problemTimerSprite;
         else
             timerImage.sprite = solutionTimerSprite;
+        timerImage.fillAmount = timer.fillAmount;
 
         if(timer.loadNextQuestion)
         {
-            timer.loadNextQuestion = false;
-            GetNextQuestion();
+            if (questions.Count <= 0)
+            {
+                GameManager.Instance.ShowEndSceen();
+            }
+            else
+            {
+                timer.loadNextQuestion = false;
+                GetNextQuestion();
+            }
         }
 
-        if (!timer.isProblemTime && chooseAnswer == false)
+        if (timer.isProblemTime == false && chooseAnswer == false)
         {
             DisplaySolution(-1);
         }
