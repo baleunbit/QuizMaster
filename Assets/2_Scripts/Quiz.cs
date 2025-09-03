@@ -30,10 +30,17 @@ public class Quiz : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
     ScoreKeeper scoreKeeper;
 
+    [Header("ProgressBar")]
+    [SerializeField] Slider progressBar;
+    public bool isComplete;
+
     void Start()
     {
         timer = FindFirstObjectByType<Timer>();
         scoreKeeper = FindFirstObjectByType<ScoreKeeper>();
+        progressBar.maxValue = questions.Count;
+        progressBar.value = 0;
+
         GetNextQuestion();
     }
 
@@ -71,6 +78,7 @@ public class Quiz : MonoBehaviour
         GetRandomQuestion();
         OnDisplayQuestion();
         scoreKeeper.IncrementQuestionSeen();
+        progressBar.value++;
     }
 
     private void GetRandomQuestion()
