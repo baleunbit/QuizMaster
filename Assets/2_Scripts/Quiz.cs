@@ -56,7 +56,9 @@ public class Quiz : MonoBehaviour
         {
             if (questions.Count <= 0)
             {
+                isComplete = true;
                 GameManager.Instance.ShowEndSceen();
+                return;
             }
             else
             {

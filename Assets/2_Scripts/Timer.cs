@@ -3,7 +3,7 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     [SerializeField] float problemTime = 10f;
-    [SerializeField] float solutionTime = 3f; //결과
+    [SerializeField] float solutionTime = 2f; //결과
     float time = 0;
 
     [HideInInspector] public bool isProblemTime = true;
