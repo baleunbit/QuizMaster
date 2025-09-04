@@ -12,7 +12,12 @@ public class EndScreen : MonoBehaviour
 
         finalScoreText.text = "당신은 프로게이머 입니다.\r\n" +
             $"당신의 점수 {scoreKeeper.CalculateScore()}%";
-        if (score >= 90)
+        if (score >= 100)
+        {
+            finalScoreText.text = "당신은 프로게이머 입니다.\r\n" +
+                $"당신의 점수 {scoreKeeper.CalculateScore()}%";
+        }
+        else if (score >= 90)
         {
             finalScoreText.text = "당신은 썩은물 입니다.\r\n" +
                 $"당신의 점수 {scoreKeeper.CalculateScore()}%";
