@@ -32,16 +32,35 @@ public class Quiz : MonoBehaviour
 
     [Header("ProgressBar")]
     [SerializeField] Slider progressBar;
-    public bool isComplete;
+
+    bool isGeneratingQuestions = false;
 
     void Start()
     {
         timer = FindFirstObjectByType<Timer>();
         scoreKeeper = FindFirstObjectByType<ScoreKeeper>();
+
+        if(questions.Count == 0)
+        {
+            GenerateQuestionsIfNeeded();
+        } 
+        else
+        {
+            InitalizeProgressBar();
+        }
+    }
+
+    private void GenerateQuestionsIfNeeded()
+    {
+        if (isGeneratingQuestions) return;
+        isGeneratingQuestions = true;
+        GameManager.Instance.ShowLoadingSceen();
+    }
+
+    private void InitalizeProgressBar()
+    {
         progressBar.maxValue = questions.Count;
         progressBar.value = 0;
-
-        GetNextQuestion();
     }
 
     private void Update()
@@ -54,11 +73,10 @@ public class Quiz : MonoBehaviour
 
         if(timer.loadNextQuestion)
         {
-            if (questions.Count <= 0)
+            if (questions.Count == 0)
             {
-                isComplete = true;
-                GameManager.Instance.ShowEndSceen();
-                return;
+                GenerateQuestionsIfNeeded();
+                //GameManager.Instance.ShowEndSceen();
             }
             else
             {
@@ -77,7 +95,7 @@ public class Quiz : MonoBehaviour
     {
         if (questions.Count == 0)
         {
-            Debug.Log("문제가 더 이상 없습니다!");
+            Debug.Log("문제가 없습니다.");
             return;
         }
 

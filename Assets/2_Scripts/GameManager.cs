@@ -7,28 +7,30 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Quiz quiz;
     [SerializeField] private EndScreen endScreen;
+    [SerializeField] private GameObject loadingCanvas;
 
     void Awake()
     {
-            if (Instance == null)  // null일 때 할당하도록 변경
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
+       if (Instance == null)  // null일 때 할당하도록 변경
+       {
+           Instance = this;
+           //DontDestroyOnLoad(gameObject);
+       }
+       else if (Instance != this)
+       {
+           Destroy(gameObject);
+       }
     }
     void Start()
     {
-        ShowQuizSceen();
+        //ShowQuizSceen();
     }
 
-    private void ShowQuizSceen()
+    public void ShowQuizSceen()
     {
         quiz.gameObject.SetActive(true);
         endScreen.gameObject.SetActive(false);
+        loadingCanvas.SetActive(false);
     }
 
     public void ShowEndSceen()
@@ -36,11 +38,18 @@ public class GameManager : MonoBehaviour
         quiz.gameObject.SetActive(false);
         endScreen.gameObject.SetActive(true);
         endScreen.ShowFinalScore();
+        loadingCanvas.SetActive(false);
+    }
+
+    public void ShowLoadingSceen()
+    {
+        quiz.gameObject.SetActive(false);
+        endScreen.gameObject.SetActive(false);
+        loadingCanvas.SetActive(true);
     }
 
     public void OnReplayLevel1()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
 }

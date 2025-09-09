@@ -13,6 +13,7 @@ public class Timer : MonoBehaviour
     private void Start()
     {
         time = problemTime;
+        loadNextQuestion = true;
     }
 
     private void Update()
@@ -24,13 +25,9 @@ public class Timer : MonoBehaviour
     private void UpdateFillAmount()
     {
         if (isProblemTime)
-        {
             fillAmount = time / problemTime;
-        }
         else
-        {
             fillAmount = time / solutionTime;
-        }
     }
 
     private void TimerCountDown()
