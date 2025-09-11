@@ -23,8 +23,6 @@ public class Quiz : MonoBehaviour
     [SerializeField] Image timerImage;
     [SerializeField] Sprite problemTimerSprite;
     [SerializeField] Sprite solutionTimerSprite;
-    Timer timer; 
-    bool chooseAnswer = false;
 
     [Header("Score")]
     [SerializeField] TextMeshProUGUI scoreText;
@@ -36,13 +34,16 @@ public class Quiz : MonoBehaviour
     [Header("ChatGPT Client")]
     [SerializeField] ChatGPTClient chatGPTClient;
     [SerializeField] int questionCount = 3;
+
+    Timer timer;
+    bool chooseAnswer = false;
     bool isGeneratingQuestions = false;
 
     void Start()
     {
         timer = FindFirstObjectByType<Timer>();
         scoreKeeper = FindFirstObjectByType<ScoreKeeper>();
-        chatGPTClient.quizGenerateHandler += QuizGeneratedHandler;
+        chatGPTClient.quizGenerateHandler += OnQuizGenerated;
 
         if (questions.Count == 0)
         {
@@ -62,8 +63,8 @@ public class Quiz : MonoBehaviour
         GameManager.Instance.ShowLoadingSceen();
 
         string topicToUse = GetTrendingTopic();
-        chatGPTClient.GenerateQuestions(questionCount, topicToUse);
-        Debug.Log($"Generating questions on the topic: {topicToUse}");
+        chatGPTClient.GenerateQuizQuestions(questionCount, topicToUse);
+        Debug.Log("Generating questions on topic:" + topicToUse);
     }
 
     private string GetTrendingTopic()
@@ -80,10 +81,9 @@ public class Quiz : MonoBehaviour
         return topics[randomIndex];
     }
 
-    void QuizGeneratedHandler (List<QuestionSO> Questions)
+    private void OnQuizGenerated (List<QuestionSO> generatedQuestions)
     {
-        //questions = generatedQuestions;
-        Debug.Log($"Received {questions.Count} questions from ChatGPTClient.");
+        Debug.Log("Quiz received with " + generatedQuestions.Count + " questions.");
         isGeneratingQuestions = false;
     }
     private void InitalizeProgressBar()
