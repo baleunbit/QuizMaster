@@ -13,7 +13,7 @@ public class Quiz : MonoBehaviour
 
     [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
-    [SerializeField] TextMeshProUGUI[] answerTextArr;
+    bool chooseAnswer = false;
 
     [Header("Button Color")]
     [SerializeField] Sprite defaultAnswerSprite;
@@ -23,6 +23,7 @@ public class Quiz : MonoBehaviour
     [SerializeField] Image timerImage;
     [SerializeField] Sprite problemTimerSprite;
     [SerializeField] Sprite solutionTimerSprite;
+    Timer timer;
 
     [Header("Score")]
     [SerializeField] TextMeshProUGUI scoreText;
@@ -34,16 +35,15 @@ public class Quiz : MonoBehaviour
     [Header("ChatGPT Client")]
     [SerializeField] ChatGPTClient chatGPTClient;
     [SerializeField] int questionCount = 3;
+    [SerializeField] TextMeshProUGUI loadingText;
 
-    Timer timer;
-    bool chooseAnswer = false;
     bool isGeneratingQuestions = false;
 
     void Start()
     {
         timer = FindFirstObjectByType<Timer>();
         scoreKeeper = FindFirstObjectByType<ScoreKeeper>();
-        chatGPTClient.quizGenerateHandler += OnQuizGenerated;
+        chatGPTClient.quizGenerateHandler += QuizGeneratedHandler;
 
         if (questions.Count == 0)
         {
@@ -81,11 +81,24 @@ public class Quiz : MonoBehaviour
         return topics[randomIndex];
     }
 
-    private void OnQuizGenerated (List<QuestionSO> generatedQuestions)
+    void QuizGeneratedHandler (List<QuestionSO> questions)
     {
-        Debug.Log("Quiz received with " + generatedQuestions.Count + " questions.");
+        Debug.Log($"QuizGeneratedHandler : {questions.Count} questions recevied.");
         isGeneratingQuestions = false;
+
+        if(questions == null || questions.Count == 0)
+        {
+            Debug.LogError("문제 생성에 실패 했습니다.");
+            loadingText.text = "문제 생성에 실패 했습니다.\n인터넷 연결을 확인하고 다시 연결 해주세요.";
+            return;
+        }
+
+        this.questions.AddRange(questions);
+        progressBar.maxValue += questions.Count;
+
+        GetNextQuestion();
     }
+
     private void InitalizeProgressBar()
     {
         progressBar.maxValue = questions.Count;
@@ -109,7 +122,7 @@ public class Quiz : MonoBehaviour
             }
             else
             {
-                timer.loadNextQuestion = false;
+                //timer.loadNextQuestion = false;
                 GetNextQuestion();
             }
         }
@@ -128,6 +141,9 @@ public class Quiz : MonoBehaviour
             return;
         }
 
+        timer.loadNextQuestion = false;
+
+        GameManager.Instance.ShowQuizSceen();
         chooseAnswer = false;
         SetButtonState(true);
         SetDefaultButtonSprites();
@@ -148,9 +164,9 @@ public class Quiz : MonoBehaviour
     {
         questionText.text = currentQuestion.GetQuestion();
 
-        for (int i = 0; i < answerTextArr.Length; i++)
+        for (int i = 0; i < answerButtons.Length; i++)
         {
-            answerTextArr[i].text = currentQuestion.GetAnswers(i);
+            answerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.GetAnswers(i);
         }
     }
 
@@ -159,6 +175,7 @@ public class Quiz : MonoBehaviour
         chooseAnswer = true;
         DisplaySolution(index);
         timer.CancelTimer();
+        SetButtonState(false);
         scoreText.text = $"Score: {scoreKeeper.CalculateScore()}%";
     }
 
@@ -176,19 +193,18 @@ public class Quiz : MonoBehaviour
         }
         SetButtonState(false);
     }
-
-    private void SetDefaultButtonSprites()
-    {
-        foreach (GameObject obj in answerButtons)
-        {
-            obj.GetComponent<Image>().sprite = defaultAnswerSprite;
-        }
-    }
     private void SetButtonState(bool state)
     {
         foreach (GameObject obj in answerButtons)
         {
             obj.GetComponent<Button>().interactable = state;
+        }
+    }
+    private void SetDefaultButtonSprites()
+    {
+        foreach (GameObject obj in answerButtons)
+        {
+            obj.GetComponent<Image>().sprite = defaultAnswerSprite;
         }
     }
 }

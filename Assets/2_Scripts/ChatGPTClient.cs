@@ -18,6 +18,7 @@ public class ChatGPTClient : MonoBehaviour
     private IEnumerator GenerateWithDelay()
     { 
         yield return new WaitForSeconds(3f);
+
         List<QuestionSO> questions = new List<QuestionSO>();
         QuestionSO so1 = CreateQuetion("GPT 생성 질문 1",
             new string[] { "답변1(정답)", "답변2", "답변3", "답변4" },
@@ -34,10 +35,8 @@ public class ChatGPTClient : MonoBehaviour
             2);
         questions.Add(so3);
 
-        quizGenerateHandler?.Invoke(questions);
+        quizGenerateHandler?.Invoke(questions);   
         Debug.Log("Finished GenerateWithDelay............");
-
-
     }
 
     QuestionSO CreateQuetion(string q, string[] a, int correctIndex)
