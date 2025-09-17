@@ -9,11 +9,11 @@ public class Quiz : MonoBehaviour
     [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] List<QuestionSO> questions = new List<QuestionSO>();
-    QuestionSO currentQuestion;
+    private QuestionSO currentQuestion;
 
     [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
-    bool chooseAnswer = false;
+    private bool chooseAnswer = false;
 
     [Header("Button Color")]
     [SerializeField] Sprite defaultAnswerSprite;
@@ -23,11 +23,12 @@ public class Quiz : MonoBehaviour
     [SerializeField] Image timerImage;
     [SerializeField] Sprite problemTimerSprite;
     [SerializeField] Sprite solutionTimerSprite;
-    Timer timer;
+    [SerializeField] TextMeshProUGUI timerText;   // 남은 시간 표시 텍스트
+    private Timer timer;
 
     [Header("Score")]
     [SerializeField] TextMeshProUGUI scoreText;
-    ScoreKeeper scoreKeeper;
+    private ScoreKeeper scoreKeeper;
 
     [Header("ProgressBar")]
     [SerializeField] Slider progressBar;
@@ -38,7 +39,7 @@ public class Quiz : MonoBehaviour
     [SerializeField] TextMeshProUGUI loadingText;
     [SerializeField] TextMeshProUGUI hintText;
 
-    bool isGeneratingQuestions = false;
+    private bool isGeneratingQuestions = false;
 
     void Start()
     {
@@ -49,7 +50,7 @@ public class Quiz : MonoBehaviour
         if (questions.Count == 0)
         {
             GenerateQuestionsIfNeeded();
-        } 
+        }
         else
         {
             InitalizeProgressBar();
@@ -65,7 +66,7 @@ public class Quiz : MonoBehaviour
 
         string topicToUse = GetTrendingTopic();
         chatGPTClient.GenerateQuizQuestions(questionCount, topicToUse);
-        Debug.Log("Generating questions on topic:" + topicToUse);
+        Debug.Log("Generating questions on topic: " + topicToUse);
     }
 
     private string GetTrendingTopic()
@@ -82,20 +83,20 @@ public class Quiz : MonoBehaviour
         return topics[randomIndex];
     }
 
-    void QuizGeneratedHandler (List<QuestionSO> questions)
+    void QuizGeneratedHandler(List<QuestionSO> newQuestions)
     {
-        Debug.Log($"QuizGeneratedHandler : {questions.Count} questions recevied.");
+        Debug.Log($"QuizGeneratedHandler : {newQuestions?.Count ?? 0} questions received.");
         isGeneratingQuestions = false;
 
-        if(questions == null || questions.Count == 0)
+        if (newQuestions == null || newQuestions.Count == 0)
         {
             Debug.LogError("문제 생성에 실패 했습니다.");
-            loadingText.text = "문제 생성에 실패 했습니다.\n인터넷 연결을 확인하고 다시 연결 해주세요.";
+            loadingText.text = "문제 생성에 실패 했습니다.\n인터넷 연결을 확인하고 다시 시도해 주세요.";
             return;
         }
 
-        this.questions.AddRange(questions);
-        progressBar.maxValue += questions.Count;
+        this.questions.AddRange(newQuestions);
+        progressBar.maxValue += newQuestions.Count;
 
         GetNextQuestion();
     }
@@ -108,26 +109,32 @@ public class Quiz : MonoBehaviour
 
     private void Update()
     {
+        // 타이머 비주얼(아이콘/게이지)
         if (timer.isProblemTime)
             timerImage.sprite = problemTimerSprite;
         else
             timerImage.sprite = solutionTimerSprite;
+
         timerImage.fillAmount = timer.fillAmount;
 
-        if(timer.loadNextQuestion)
+        // 남은 시간 숫자(초) 표시
+        if (timerText != null)
+            timerText.text = $"남은시간 : {Mathf.CeilToInt(timer.remainingTime)}초";
+
+        // 다음 문제 로딩
+        if (timer.loadNextQuestion)
         {
             if (questions.Count == 0)
             {
                 GenerateQuestionsIfNeeded();
-                //GameManager.Instance.ShowEndSceen();
             }
             else
             {
-                //timer.loadNextQuestion = false;
                 GetNextQuestion();
             }
         }
 
+        // 시간 끝났는데 선택 안했으면 자동 해설
         if (timer.isProblemTime == false && chooseAnswer == false)
         {
             DisplaySolution(-1);
@@ -178,7 +185,9 @@ public class Quiz : MonoBehaviour
         DisplaySolution(index);
         timer.CancelTimer();
         SetButtonState(false);
-        scoreText.text = $"Score: {scoreKeeper.CalculateScore()}%";
+
+        // 점수: 문제당 5점으로 계산하도록 ScoreKeeper.CalculateScore()를 변경한 상태라고 가정
+        scoreText.text = $"점수: {scoreKeeper.CalculateScore()}점";
     }
 
     private void DisplaySolution(int index)
@@ -186,15 +195,19 @@ public class Quiz : MonoBehaviour
         if (index == currentQuestion.GetCorrectAnswerIndex())
         {
             questionText.text = "정답입니다!";
-            answerButtons[index].GetComponent<Image>().sprite = correctAnswerSprite;
+            if (index >= 0 && index < answerButtons.Length)
+                answerButtons[index].GetComponent<Image>().sprite = correctAnswerSprite;
+
             scoreKeeper.IncrementCorrectAnswer();
         }
         else
         {
             questionText.text = $"오답입니다! 정답은 {currentQuestion.GetCorrectAnswer()}입니다.";
         }
+
         SetButtonState(false);
     }
+
     private void SetButtonState(bool state)
     {
         foreach (GameObject obj in answerButtons)
@@ -202,6 +215,7 @@ public class Quiz : MonoBehaviour
             obj.GetComponent<Button>().interactable = state;
         }
     }
+
     private void SetDefaultButtonSprites()
     {
         foreach (GameObject obj in answerButtons)
