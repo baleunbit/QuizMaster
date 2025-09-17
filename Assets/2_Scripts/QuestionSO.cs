@@ -8,6 +8,7 @@ public class QuestionSO : ScriptableObject
     [SerializeField] string question = "여기에 질문을 입력하세요.";
     [SerializeField] string[] answers = new string[4];
     [SerializeField] int correctAnswerIndex = 0;
+    [SerializeField] string hint = "";
 
     public string GetQuestion()
     {
@@ -23,10 +24,20 @@ public class QuestionSO : ScriptableObject
     {
         return answers[correctAnswerIndex];
     }
+    public string GetHint()
+    {
+        return hint;
+    }
 
     public int GetCorrectAnswerIndex()
     {
         return correctAnswerIndex;
+    }
+
+    public void SetData(string q, string[] a, int correctIndex, string hint)
+    {
+        SetData(q, a, correctIndex);
+        this.hint = hint;
     }
     public void SetData(string q, string[] a, int correctIndex)
     {

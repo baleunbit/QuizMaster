@@ -36,6 +36,7 @@ public class Quiz : MonoBehaviour
     [SerializeField] ChatGPTClient chatGPTClient;
     [SerializeField] int questionCount = 3;
     [SerializeField] TextMeshProUGUI loadingText;
+    [SerializeField] TextMeshProUGUI hintText;
 
     bool isGeneratingQuestions = false;
 
@@ -163,6 +164,7 @@ public class Quiz : MonoBehaviour
     private void OnDisplayQuestion()
     {
         questionText.text = currentQuestion.GetQuestion();
+        hintText.text = "ÈùÆ®: " + currentQuestion.GetHint();
 
         for (int i = 0; i < answerButtons.Length; i++)
         {
