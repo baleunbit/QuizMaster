@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -80,40 +80,38 @@ public class ChatGPTClient : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"Resources ¼³Á¤ ÆÄÀÏ ·Îµå ½ÇÆĞ: {e.Message}");
+            Debug.LogWarning($"Resources ì„¤ì • íŒŒì¼ ë¡œë“œ ì‹¤íŒ¨: {e.Message}");
         }
 
         return "";
     }
 
-    public void GenerateQuizQuestions(int count = 3, string topic = "ÀÏ¹İ»ó½Ä")
+    public void GenerateQuizQuestions(int count = 3, string topic = "ì¼ë°˜ìƒì‹")
     {
         StartCoroutine(RequestQuizQuestions(count, topic));
     }
 
     private IEnumerator RequestQuizQuestions(int count, string topic)
     {
-        string prompt = $"´ÙÀ½ Á¶°Ç¿¡ ¸Â´Â °´°ü½Ä ÄûÁî ¹®Á¦¸¦ {count}°³ »ı¼ºÇØÁÖ¼¼¿ä:\n" +
-                       $"ÁÖÁ¦: {topic}\n" +
-                       "Á¶°Ç:\n" +
-                       "- ¹®Á¦¿Í º¸±â´Â 20ÀÚ ÀÌ³»·Î Âª°Ô ÀÛ¼º ÇØÁÖ¼¼¿ä\n" +
-                       "- ½Ã°£ÀÌ 6ÃÊ ³²¾ÒÀ» ¶§ ÈùÆ®¸¦ º¸¿©ÁÖ¼¼¿ä\n" +
-                       "- ¹®Á¦¿Í º¸±â´Â Ç×»ó °ÔÀÓ ³»¿¡ ½ÇÁ¦·Î Á¸ÀçÇÏ´Â ¹®Á¦¿Í º¸±â¸¦ ±¸¼º ÇØÁÖ¼¼¿ä\n" +
-                       "- ¹®Á¦¿Í º¸±â´Â Ç×»ó ¸»ÀÌ µÇµµ·Ï ±¸¼º \n" +
-                       "- ¼±ÅÃÁö´Â ÇÔÁ¤ÀÌ ÀÖ°Å³ª ÀçÄ¡ÀÖ°Ô ±¸¼º ÇØÁÖ¼¼¿ä\n" +
-                       "- Á¤´äÀº 0~3 »çÀÌÀÇ ÀÎµ¦½º·Î Ç¥½Ã ÇØÁÖ¼¼¿ä\n" +
-                       "- ¹®Á¦¿Í ¼±ÅÃÁö´Â Èï¹Ì·Ó°í Âü¿©ÇÏ°í ½Í°Ô ¸¸µé¾î ÁÖ¼¼¿ä\n" +
-                       "- ÀÀ´äÀº ¹İµå½Ã ´ÙÀ½ JSON Çü½ÄÀ¸·Î¸¸ Á¦°ø ÇØ ÁÖ¼¼¿ä:\n" +
-                       "{\n" +
-                       "  \"questions\": [\n" +
-                       "    {\n" +
-                       "      \"question\": \"¹®Á¦ ³»¿ë\",\n" +
-                       "      \"answers\": [\"¼±ÅÃÁö1\", \"¼±ÅÃÁö2\", \"¼±ÅÃÁö3\", \"¼±ÅÃÁö4\"],\n" +
-                       "      \"correctAnswerIndex\": 0\n" +
-                       "    },\n" +
-                       "    }\n" +
-                       "  ]\n" +
-                       "}";
+        string prompt = $"ë‹¤ìŒ ì¡°ê±´ì— ë§ëŠ” ê°ê´€ì‹ í€´ì¦ˆ ë¬¸ì œë¥¼ {count}ê°œ ìƒì„±í•´ì£¼ì„¸ìš”:\n" +
+                        $"ì£¼ì œ: {topic}\n" +
+                        "ì¡°ê±´:\n" +
+                        "- ë¬¸ì œì™€ ë³´ê¸°ëŠ” 20ì ì´ë‚´ë¡œ ì§§ê²Œ ì‘ì„±\n" +
+                        "- íŒíŠ¸ëŠ” 15ì ì´ë‚´ë¡œ ê°„ê²°í•˜ê²Œ ì‘ì„±\n" +
+                        "- ë¬¸ì œ/ë³´ê¸°ëŠ” ì‹¤ì œ ê²Œì„ ë§¥ë½ì—ì„œ ìì—°ìŠ¤ëŸ½ê²Œ\n" +
+                        "- ì„ íƒì§€ëŠ” ì¬ì¹˜ìˆê±°ë‚˜ í•¨ì • ìš”ì†Œ í¬í•¨\n" +
+                        "- ì •ë‹µì€ 0~3 ì¸ë±ìŠ¤\n" +
+                        "- ì‘ë‹µì€ ë°˜ë“œì‹œ ë‹¤ìŒ JSON í˜•ì‹(ì„¤ëª… ê¸ˆì§€):\n" +
+                        "{\n" +
+                        "  \"questions\": [\n" +
+                        "    {\n" +
+                        "      \"question\": \"ë¬¸ì œ ë‚´ìš©\",\n" +
+                        "      \"answers\": [\"ì„ íƒì§€1\", \"ì„ íƒì§€2\", \"ì„ íƒì§€3\", \"ì„ íƒì§€4\"],\n" +
+                        "      \"correctAnswerIndex\": 0,\n" +
+                        "      \"hint\": \"ê°„ë‹¨í•œ íŒíŠ¸\"\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}";
 
         Debug.Log("Prompt to ChatGPT:\n" + prompt);
 
@@ -167,7 +165,7 @@ public class ChatGPTClient : MonoBehaviour
                     }
 
                     Debug.Log("Response from ChatGPT:\n" + jsonContent);
-                    // JSON ¹®ÀÚ¿­¿¡¼­ ºÒÇÊ¿äÇÑ ºÎºĞ Á¦°Å
+                    // JSON ë¬¸ìì—´ì—ì„œ ë¶ˆí•„ìš”í•œ ë¶€ë¶„ ì œê±°
                     jsonContent = jsonContent.Trim();
                     if (jsonContent.StartsWith("```json"))
                     {
@@ -186,16 +184,91 @@ public class ChatGPTClient : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"ÀÀ´ä ÆÄ½Ì ¿À·ù: {e.Message}");
-                    Debug.LogError($"ÀÀ´ä ³»¿ë: {webRequest.downloadHandler.text}");
+                    Debug.LogError($"ì‘ë‹µ íŒŒì‹± ì˜¤ë¥˜: {e.Message}");
+                    Debug.LogError($"ì‘ë‹µ ë‚´ìš©: {webRequest.downloadHandler.text}");
                 }
             }
             else
             {
-                Debug.LogError($"ChatGPT API ¿äÃ» ½ÇÆĞ: {webRequest.error}");
-                Debug.LogError($"ÀÀ´ä ÄÚµå: {webRequest.responseCode}");
-                Debug.LogError($"ÀÀ´ä ³»¿ë: {webRequest.downloadHandler.text}");
+                Debug.LogError($"ChatGPT API ìš”ì²­ ì‹¤íŒ¨: {webRequest.error}");
+                Debug.LogError($"ì‘ë‹µ ì½”ë“œ: {webRequest.responseCode}");
+                Debug.LogError($"ì‘ë‹µ ë‚´ìš©: {webRequest.downloadHandler.text}");
             }
+        }
+    }
+    public void GenerateCheerMessage(bool isCorrect, string topic, int score, Action<string> onDone)
+    {
+        StartCoroutine(RequestCheerMessage(isCorrect, topic, score, onDone));
+    }
+
+    private IEnumerator RequestCheerMessage(bool isCorrect, string topic, int score, Action<string> onDone)
+    {
+        // í•œ ì¤„ë§Œ, 40ì ì´ë‚´, í•œêµ­ì–´, ì´ëª¨ì§€ 1~2ê°œ í—ˆìš©
+        string mood = isCorrect ? "ì •ë‹µ" : "ì˜¤ë‹µ";
+        string prompt =
+            $"í€´ì¦ˆ {mood} ê²°ê³¼ì— ë§ëŠ” í•œêµ­ì–´ í•œ ì¤„ ì‘ì› ë©”ì‹œì§€ë¥¼ 1ê°œë§Œ ë§Œë“¤ì–´ì¤˜.\n" +
+            $"ì£¼ì œ: {topic}\n" +
+            $"í˜„ì¬ ì ìˆ˜: {score}ì \n" +
+            "- 40ì ì´ë‚´, ê°„ê²°í•˜ê³  ë”°ëœ»í•˜ê²Œ, ì¬ë¯¸ìˆê²Œ\n" +
+            "- ì´ëª¨ì§€ëŠ” 0~2ê°œë§Œ\n" +
+            "- ë”°ì˜´í‘œ ì—†ì´ ë¬¸ì¥ë§Œ ë°˜í™˜\n" +
+            "- ì½”ë“œë¸”ë¡, ì„¤ëª…, ì ‘ë‘ì‚¬/ì ‘ë¯¸ì‚¬ ê¸ˆì§€";
+
+        ChatGPTRequest req = new ChatGPTRequest
+        {
+            messages = new Message[]
+            {
+            new Message { role = "user", content = prompt }
+            }
+        };
+
+        string json = JsonUtility.ToJson(req);
+
+        using (UnityWebRequest webRequest = new UnityWebRequest(API_URL, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+            webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            webRequest.downloadHandler = new DownloadHandlerBuffer();
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+            webRequest.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+
+            yield return webRequest.SendWebRequest();
+
+            string result = null;
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                try
+                {
+                    var resp = JsonUtility.FromJson<ChatGPTResponse>(webRequest.downloadHandler.text);
+                    result = resp?.choices != null && resp.choices.Length > 0
+                        ? resp.choices[0].message?.content
+                        : null;
+
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        // í˜¹ì‹œ ëª¨ë¥¼ ì½”ë“œë¸”ë¡ ì œê±°
+                        result = result.Trim();
+                        if (result.StartsWith("```")) result = result.Trim('`').Trim();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"Cheer parse fail: {e.Message}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Cheer request fail: {webRequest.error}");
+            }
+
+            if (string.IsNullOrEmpty(result))
+            {
+                // ì‹¤íŒ¨ ì‹œ null ì „ë‹¬ (í€´ì¦ˆì—ì„œ í´ë°± ìœ ì§€)
+                result = null;
+            }
+
+            onDone?.Invoke(result);
         }
     }
 
@@ -207,20 +280,26 @@ public class ChatGPTClient : MonoBehaviour
         {
             QuestionSO questionSO = ScriptableObject.CreateInstance<QuestionSO>();
 
-            // ReflectionÀ» »ç¿ëÇÏ¿© private ÇÊµå¿¡ °ª ¼³Á¤
-            var questionField = typeof(QuestionSO).GetField("question", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var answersField = typeof(QuestionSO).GetField("answers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var correctAnswerIndexField = typeof(QuestionSO).GetField("correctAnswerIndex", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            var questionField = typeof(QuestionSO).GetField("question", flags);
+            var answersField = typeof(QuestionSO).GetField("answers", flags);
+            var correctAnswerIndexField = typeof(QuestionSO).GetField("correctAnswerIndex", flags);
+            var hintField = typeof(QuestionSO).GetField("hint", flags); // âœ… ì¶”ê°€
 
             questionField?.SetValue(questionSO, quizQ.question);
             answersField?.SetValue(questionSO, quizQ.answers);
             correctAnswerIndexField?.SetValue(questionSO, quizQ.correctAnswerIndex);
+
+            // âœ… hint ì£¼ì… (í•„ë“œê°€ ì—†ìœ¼ë©´ ë¡œê·¸)
+            if (hintField != null) hintField.SetValue(questionSO, quizQ.hint);
+            else Debug.LogWarning("QuestionSOì— 'hint' í•„ë“œê°€ ì—†ìŠµë‹ˆë‹¤. GetHint()ê°€ ì–´ëŠ í•„ë“œë¥¼ ì½ëŠ”ì§€ í™•ì¸í•˜ì„¸ìš”.");
 
             questionSOs.Add(questionSO);
         }
 
         return questionSOs;
     }
+
 
     public void SetApiKey(string key)
     {

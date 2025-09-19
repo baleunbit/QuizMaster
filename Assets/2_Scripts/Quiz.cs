@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -23,7 +23,7 @@ public class Quiz : MonoBehaviour
     [SerializeField] Image timerImage;
     [SerializeField] Sprite problemTimerSprite;
     [SerializeField] Sprite solutionTimerSprite;
-    [SerializeField] TextMeshProUGUI timerText;   // ³²Àº ½Ã°£ Ç¥½Ã ÅØ½ºÆ®
+    [SerializeField] TextMeshProUGUI timerText;   // ë‚¨ì€ ì‹œê°„ í‘œì‹œ í…ìŠ¤íŠ¸
     private Timer timer;
 
     [Header("Score")]
@@ -37,7 +37,14 @@ public class Quiz : MonoBehaviour
     [SerializeField] ChatGPTClient chatGPTClient;
     [SerializeField] int questionCount = 3;
     [SerializeField] TextMeshProUGUI loadingText;
+
+    [Header("Hint")]
+    [SerializeField] Button hintButton;
     [SerializeField] TextMeshProUGUI hintText;
+    private bool hintShown = false;
+
+    [Header("Cheer")]
+    [SerializeField] TextMeshProUGUI cheerText;
 
     private bool isGeneratingQuestions = false;
 
@@ -73,15 +80,32 @@ public class Quiz : MonoBehaviour
     {
         string[] topics = new string[]
         {
-            "¹èÆ²±×¶ó¿îµå",
-            "¹ß·Î¶õÆ®",
-            "·¹µğ ¿À¾î ³´",
-            "¸¶ÀÎÅ©·¡ÇÁÆ®",
-            "·¹µå µ¥µå ¸®µ©¼Ç"
+            "ë°°í‹€ê·¸ë¼ìš´ë“œ",
+            "ë°œë¡œë€íŠ¸",
+            "ë ˆë”” ì˜¤ì–´ ë‚«",
+            "ë§ˆì¸í¬ë˜í”„íŠ¸",
+            "ë ˆë“œ ë°ë“œ ë¦¬ë€ì…˜"
         };
         int randomIndex = UnityEngine.Random.Range(0, topics.Length);
         return topics[randomIndex];
     }
+
+    private static readonly string[] FALLBACK_CORRECT = new[]
+    {
+    "ë©‹ì§€ë‹¤! \nê³„ì† ê°€ì! ",
+    "ì™„ë²½í•´! \nê° ì¡ì•˜ì–´! ",
+    "êµ¿ìƒ·! \në‹¤ìŒë„ ê¸°ëŒ€í•´! ",
+    };
+
+    private static readonly string[] FALLBACK_WRONG = new[]
+    {
+    "ê´œì°®ì•„, \në‹¤ìŒì— ì¡ì! ",
+    "í•œ ë²ˆ ì‚ë—! \në‹¤ì‹œ ê°€ì! ",
+    "ì¡°ê¸ˆë§Œ ë”! \ní•  ìˆ˜ ìˆì–´! ",
+    };
+
+    private System.Random rng = new System.Random();
+    private string PickRandom(string[] arr) => arr[rng.Next(arr.Length)];
 
     void QuizGeneratedHandler(List<QuestionSO> newQuestions)
     {
@@ -90,8 +114,8 @@ public class Quiz : MonoBehaviour
 
         if (newQuestions == null || newQuestions.Count == 0)
         {
-            Debug.LogError("¹®Á¦ »ı¼º¿¡ ½ÇÆĞ Çß½À´Ï´Ù.");
-            loadingText.text = "¹®Á¦ »ı¼º¿¡ ½ÇÆĞ Çß½À´Ï´Ù.\nÀÎÅÍ³İ ¿¬°áÀ» È®ÀÎÇÏ°í ´Ù½Ã ½ÃµµÇØ ÁÖ¼¼¿ä.";
+            Debug.LogError("ë¬¸ì œ ìƒì„±ì— ì‹¤íŒ¨ í–ˆìŠµë‹ˆë‹¤.");
+            loadingText.text = "ë¬¸ì œ ìƒì„±ì— ì‹¤íŒ¨ í–ˆìŠµë‹ˆë‹¤.\nì¸í„°ë„· ì—°ê²°ì„ í™•ì¸í•˜ê³  ë‹¤ì‹œ ì‹œë„í•´ ì£¼ì„¸ìš”.";
             return;
         }
 
@@ -109,7 +133,7 @@ public class Quiz : MonoBehaviour
 
     private void Update()
     {
-        // Å¸ÀÌ¸Ó ºñÁÖ¾ó(¾ÆÀÌÄÜ/°ÔÀÌÁö)
+        // íƒ€ì´ë¨¸ ë¹„ì£¼ì–¼(ì•„ì´ì½˜/ê²Œì´ì§€)
         if (timer.isProblemTime)
             timerImage.sprite = problemTimerSprite;
         else
@@ -117,11 +141,11 @@ public class Quiz : MonoBehaviour
 
         timerImage.fillAmount = timer.fillAmount;
 
-        // ³²Àº ½Ã°£ ¼ıÀÚ(ÃÊ) Ç¥½Ã
+        // ë‚¨ì€ ì‹œê°„ ìˆ«ì(ì´ˆ) í‘œì‹œ
         if (timerText != null)
-            timerText.text = $"³²Àº½Ã°£ : {Mathf.CeilToInt(timer.remainingTime)}ÃÊ";
+            timerText.text = $"ë‚¨ì€ì‹œê°„ : {Mathf.CeilToInt(timer.remainingTime)}ì´ˆ";
 
-        // ´ÙÀ½ ¹®Á¦ ·Îµù
+        // ë‹¤ìŒ ë¬¸ì œ ë¡œë”©
         if (timer.loadNextQuestion)
         {
             if (questions.Count == 0)
@@ -134,7 +158,7 @@ public class Quiz : MonoBehaviour
             }
         }
 
-        // ½Ã°£ ³¡³µ´Âµ¥ ¼±ÅÃ ¾ÈÇßÀ¸¸é ÀÚµ¿ ÇØ¼³
+        // ì‹œê°„ ëë‚¬ëŠ”ë° ì„ íƒ ì•ˆí–ˆìœ¼ë©´ ìë™ í•´ì„¤
         if (timer.isProblemTime == false && chooseAnswer == false)
         {
             DisplaySolution(-1);
@@ -145,9 +169,14 @@ public class Quiz : MonoBehaviour
     {
         if (questions.Count == 0)
         {
-            Debug.Log("¹®Á¦°¡ ¾ø½À´Ï´Ù.");
+            Debug.Log("ë¬¸ì œê°€ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
+
+        // ğŸ” íŒíŠ¸ ì´ˆê¸°í™”
+        hintShown = false;
+        if (hintText != null) hintText.gameObject.SetActive(false);
+        if (hintButton != null) hintButton.gameObject.SetActive(true); // ë²„íŠ¼ ë³´ì´ê¸°
 
         timer.loadNextQuestion = false;
 
@@ -161,6 +190,15 @@ public class Quiz : MonoBehaviour
         progressBar.value++;
     }
 
+    public void OnHintButtonClicked()
+    {
+        if (hintShown) return;
+
+        hintShown = true;
+        if (hintButton != null) hintButton.gameObject.SetActive(false); // ë²„íŠ¼ ìˆ¨ê¹€
+        if (hintText != null) hintText.gameObject.SetActive(true);      // íŒíŠ¸ í‘œì‹œ
+    }
+
     private void GetRandomQuestion()
     {
         int randomIndex = UnityEngine.Random.Range(0, questions.Count);
@@ -171,7 +209,13 @@ public class Quiz : MonoBehaviour
     private void OnDisplayQuestion()
     {
         questionText.text = currentQuestion.GetQuestion();
-        hintText.text = "ÈùÆ®: " + currentQuestion.GetHint();
+
+        // íŒíŠ¸ í…ìŠ¤íŠ¸ ë‚´ìš©ë§Œ ë¯¸ë¦¬ ì„¸íŒ…í•˜ê³  ìˆ¨ê²¨ë‘ê¸°
+        if (hintText != null)
+        {
+            hintText.text = "íŒíŠ¸: " + currentQuestion.GetHint();
+            hintText.gameObject.SetActive(false); // âœ… ìˆ¨ê¹€
+        }
 
         for (int i = 0; i < answerButtons.Length; i++)
         {
@@ -186,23 +230,32 @@ public class Quiz : MonoBehaviour
         timer.CancelTimer();
         SetButtonState(false);
 
-        // Á¡¼ö: ¹®Á¦´ç 5Á¡À¸·Î °è»êÇÏµµ·Ï ScoreKeeper.CalculateScore()¸¦ º¯°æÇÑ »óÅÂ¶ó°í °¡Á¤
-        scoreText.text = $"Á¡¼ö: {scoreKeeper.CalculateScore()}Á¡";
+        // ì ìˆ˜: ë¬¸ì œë‹¹ 5ì ìœ¼ë¡œ ê³„ì‚°í•˜ë„ë¡ ScoreKeeper.CalculateScore()ë¥¼ ë³€ê²½í•œ ìƒíƒœë¼ê³  ê°€ì •
+        scoreText.text = $"ì ìˆ˜: {scoreKeeper.CalculateScore()}ì ";
     }
 
     private void DisplaySolution(int index)
     {
-        if (index == currentQuestion.GetCorrectAnswerIndex())
+        bool isCorrect = (index == currentQuestion.GetCorrectAnswerIndex());
+
+        if (isCorrect)
         {
-            questionText.text = "Á¤´äÀÔ´Ï´Ù!";
+            questionText.text = "ì •ë‹µì…ë‹ˆë‹¤!";
             if (index >= 0 && index < answerButtons.Length)
                 answerButtons[index].GetComponent<Image>().sprite = correctAnswerSprite;
-
             scoreKeeper.IncrementCorrectAnswer();
         }
         else
         {
-            questionText.text = $"¿À´äÀÔ´Ï´Ù! Á¤´äÀº {currentQuestion.GetCorrectAnswer()}ÀÔ´Ï´Ù.";
+            questionText.text = $"ì˜¤ë‹µì…ë‹ˆë‹¤! ì •ë‹µì€ {currentQuestion.GetCorrectAnswer()}ì…ë‹ˆë‹¤.";
+        }
+
+        // âœ… ì‘ì› ë©”ì‹œì§€ ì¶œë ¥
+        if (cheerText != null)
+        {
+            cheerText.gameObject.SetActive(true);
+            cheerText.text = isCorrect ? PickRandom(FALLBACK_CORRECT)
+                                       : PickRandom(FALLBACK_WRONG);
         }
 
         SetButtonState(false);
