@@ -437,6 +437,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1355088536}
   m_CullTransparentMesh: 1
+--- !u!1 &1415656407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1415656409}
+  - component: {fileID: 1415656408}
+  m_Layer: 0
+  m_Name: MusicMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1415656408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415656407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154c8fcee46342d488ff6d9d300f611a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuBGM: {fileID: 8300000, guid: 95ef09ec03bd9824691cc9bb3daf67da, type: 3}
+  gameBGM: {fileID: 8300000, guid: a7e9b68207dadd145ab949dfe7d018c9, type: 3}
+  endBGM: {fileID: 8300000, guid: 972625589a078864b8df205d9cdf581a, type: 3}
+  volume: 1
+  loop: 1
+  useFade: 1
+  fadeOutDuration: 0.1
+  fadeInDuration: 0.1
+--- !u!4 &1415656409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415656407}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 957.6859, y: 727.21423, z: -8.089659}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1692224105
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,7 +900,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.7843137, g: 0.7843137, b: 0.7843137, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -928,3 +980,4 @@ SceneRoots:
   - {fileID: 931616010}
   - {fileID: 535013771}
   - {fileID: 1692224106}
+  - {fileID: 1415656409}

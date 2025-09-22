@@ -1033,7 +1033,7 @@ GameObject:
   - component: {fileID: 350927449}
   - component: {fileID: 350927448}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: LoadingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1087,8 +1087,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1273,8 +1273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4795d132160074495b1aa0f2f6d791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finalScoreText: {fileID: 1882521873}
-  scoreKeeper: {fileID: 1157415466}
+  scoreText: {fileID: 0}
+  rankText: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,7 +1610,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.7843137, g: 0.7843137, b: 0.7843137, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -2179,7 +2179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.31764707, g: 0.74509805, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2307,7 +2307,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1206447661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4077,6 +4077,7 @@ MonoBehaviour:
   solutionTimerSprite: {fileID: -5384725055999689231, guid: c02a1fa026d17924cbcbbdf43e628299, type: 3}
   timerText: {fileID: 281861967}
   scoreText: {fileID: 526506254}
+  scoreKeeper: {fileID: 0}
   progressBar: {fileID: 1757449134}
   chatGPTClient: {fileID: 1837576051}
   questionCount: 3
@@ -4089,6 +4090,7 @@ MonoBehaviour:
   fastPoints: 7
   midPoints: 5
   slowPoints: 3
+  maxQuestions: 5
 --- !u!1 &2106443005
 GameObject:
   m_ObjectHideFlags: 0
