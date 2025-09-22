@@ -25,7 +25,7 @@ public class Quiz : MonoBehaviour
     [SerializeField] Sprite solutionTimerSprite;
     [SerializeField] TextMeshProUGUI timerText;   // 남은 시간 표시 텍스트
     private Timer timer;
-
+     
     [Header("Score")]
     [SerializeField] TextMeshProUGUI scoreText;
     private ScoreKeeper scoreKeeper;
@@ -46,6 +46,14 @@ public class Quiz : MonoBehaviour
     [Header("Cheer")]
     [SerializeField] TextMeshProUGUI cheerText;
 
+    [Header("Speed Scoring")]
+    [SerializeField, Range(0f, 1f)] float fastThreshold = 0.66f; // 상: 상위 66% 시간 내 정답
+    [SerializeField, Range(0f, 1f)] float midThreshold = 0.33f; // 중: 33%~66%
+    [SerializeField] int fastPoints = 7;
+    [SerializeField] int midPoints = 5;
+    [SerializeField] int slowPoints = 3;
+    private Color baseColor;
+
     private bool isGeneratingQuestions = false;
 
     void Start()
@@ -62,6 +70,12 @@ public class Quiz : MonoBehaviour
         {
             InitalizeProgressBar();
         }
+    }
+
+    private void Awake()
+    {
+        // 스프라이트 본연의 색을 보여줄 기본색(대개 흰색)
+        baseColor = timerImage != null ? timerImage.color : Color.white;
     }
 
     private void GenerateQuestionsIfNeeded()
@@ -99,13 +113,26 @@ public class Quiz : MonoBehaviour
 
     private static readonly string[] FALLBACK_WRONG = new[]
     {
-    "괜찮아, \n다음에 잡자! ",
+    "괜찮아, \n다음에 맞추자! ",
     "한 번 삐끗! \n다시 가자! ",
     "조금만 더! \n할 수 있어! ",
     };
 
     private System.Random rng = new System.Random();
     private string PickRandom(string[] arr) => arr[rng.Next(arr.Length)];
+
+    private int GetSpeedPoints()
+    {
+        // 문제 풀이 구간(ProblemTime)에서만 의미 있음
+        // 남은 시간 비율: remaining / total
+        float remain = Mathf.Max(0.0001f, timer.remainingTime);
+        float total = Mathf.Max(0.0001f, timer.totalTime);
+        float ratio = remain / total; // 남은 시간이 많을수록 더 빠름
+
+        if (ratio >= fastThreshold) return fastPoints;
+        if (ratio >= midThreshold) return midPoints;
+        return slowPoints;
+    }
 
     void QuizGeneratedHandler(List<QuestionSO> newQuestions)
     {
@@ -133,13 +160,26 @@ public class Quiz : MonoBehaviour
 
     private void Update()
     {
-        // 타이머 비주얼(아이콘/게이지)
+        // 스프라이트 전환
         if (timer.isProblemTime)
-            timerImage.sprite = problemTimerSprite;
-        else
-            timerImage.sprite = solutionTimerSprite;
+        {
+            timerImage.sprite = problemTimerSprite;   // 오렌지 스프라이트
+            timerImage.fillAmount = timer.fillAmount;
 
-        timerImage.fillAmount = timer.fillAmount;
+            // 문제 시간에서만: 3초 이하일 때 색만 빨간색으로 틴트
+            if (timer.remainingTime <= 3f)
+                timerImage.color = Color.red;
+            else
+                timerImage.color = baseColor;         // 그 외엔 원래색(흰색 등)
+        }
+        else
+        {
+            timerImage.sprite = solutionTimerSprite;  // 파란 스프라이트
+            timerImage.fillAmount = timer.fillAmount;
+
+            // 해설 시간에서는 틴트 제거(계속 빨강 유지되는 문제 해결)
+            timerImage.color = baseColor;
+        } 
 
         // 남은 시간 숫자(초) 표시
         if (timerText != null)
@@ -238,16 +278,23 @@ public class Quiz : MonoBehaviour
     {
         bool isCorrect = (index == currentQuestion.GetCorrectAnswerIndex());
 
+
         if (isCorrect)
         {
             questionText.text = "정답입니다!";
             if (index >= 0 && index < answerButtons.Length)
                 answerButtons[index].GetComponent<Image>().sprite = correctAnswerSprite;
+
             scoreKeeper.IncrementCorrectAnswer();
+
+            // ✅ 속도 포인트 지급 (문제 시간일 때 클릭했다면 비율 반영, 아니면 하로 간주)
+            int award = timer.isProblemTime ? GetSpeedPoints() : slowPoints;
+            scoreKeeper.AddPoints(award);
         }
         else
         {
             questionText.text = $"오답입니다! 정답은 {currentQuestion.GetCorrectAnswer()}입니다.";
+            // 오답은 0점 (원하면 감점도 가능)
         }
 
         // ✅ 응원 메시지 출력
@@ -257,6 +304,8 @@ public class Quiz : MonoBehaviour
             cheerText.text = isCorrect ? PickRandom(FALLBACK_CORRECT)
                                        : PickRandom(FALLBACK_WRONG);
         }
+        // UI 갱신 (포인트 표기)
+        scoreText.text = $"점수: {scoreKeeper.CalculateScore()}점";
 
         SetButtonState(false);
     }
