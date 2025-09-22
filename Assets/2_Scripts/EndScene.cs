@@ -1,46 +1,35 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndScene : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI finalScoreText;
-    [SerializeField] ScoreKeeper scoreKeeper;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI rankText;
 
-    public void ShowFinalScore()
+    void Start()
     {
-        int score = scoreKeeper.CalculateScore();
+        int finalScore = PlayerPrefs.GetInt("FinalScore", 0);
+        scoreText.text = $"ìµœì¢… ì ìˆ˜: {finalScore}ì ";
 
-        finalScoreText.text = "´ç½ÅÀº ÇÁ·Î°ÔÀÌ¸Ó ÀÔ´Ï´Ù.\r\n" +
-            $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        if (score >= 100)
-        {
-            finalScoreText.text = "´ç½ÅÀº ÇÁ·Î°ÔÀÌ¸Ó ÀÔ´Ï´Ù.\r\n" +
-                $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        }
-        else if (score >= 90)
-        {
-            finalScoreText.text = "´ç½ÅÀº ½âÀº¹° ÀÔ´Ï´Ù.\r\n" +
-                $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        }
-        else if (score >= 80)
-        {
-            finalScoreText.text = "´ç½ÅÀº °íÀÎ¹° ÀÔ´Ï´Ù.\r\n" +
-                $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        }
-        else if (score >= 70)
-        {
-            finalScoreText.text = "´ç½ÅÀº Å·¹İÀÎ ÀÔ´Ï´Ù.\r\n" +
-                $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        }
-        else if (score >= 60)
-        {
-            finalScoreText.text = "´ç½ÅÀº ÀÏ¹İÀÎ ÀÔ´Ï´Ù.\r\n" +
-                $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        }
+        // âœ… ì ìˆ˜ êµ¬ê°„ì— ë”°ë¥¸ ë“±ê¸‰ íŒì •
+        if (finalScore >= 30)
+            rankText.text = "ë‹¹ì‹ ì€ ê³ ìˆ˜ ì…ë‹ˆë‹¤.";
+        else if (finalScore >= 20)
+            rankText.text = "ë‹¹ì‹ ì€ ì¤‘ìˆ˜ ì…ë‹ˆë‹¤.";
+        else if (finalScore >= 10)
+            rankText.text = "ë‹¹ì‹ ì€ í•˜ìˆ˜ ì…ë‹ˆë‹¤.";
         else
-        {
-            finalScoreText.text = "´ç½ÅÀº ¹è¸°ÀÌ ÀÔ´Ï´Ù.\r\n" +
-                $"´ç½ÅÀÇ Á¡¼ö {scoreKeeper.CalculateScore()}%";
-        }
+            rankText.text = "ì ìˆ˜ê°€ ë„ˆë¬´ ë‚®ì•„ìš”... ë‹¤ì‹œ ë„ì „!";
+    }
+
+    public void OnRetryClicked()
+    {
+        SceneManager.LoadScene("2_Game");
+    }
+
+    public void OnQuitClicked()
+    {
+        SceneManager.LoadScene("1_Menu");
     }
 }

@@ -1,15 +1,15 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuMgr : MonoBehaviour
 {
-        void Start()
+    public void OnPlayClicked()
     {
-        
+        SceneManager.LoadScene("2_Game");
     }
 
-    
-    void Update()
+    public void OnQuitClicked()
     {
-        
+        Application.Quit();
     }
 }

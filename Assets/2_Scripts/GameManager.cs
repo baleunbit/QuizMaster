@@ -33,14 +33,6 @@ public class GameManager : MonoBehaviour
         loadingCanvas.SetActive(false);
     }
 
-    public void ShowEndSceen()
-    {
-        quiz.gameObject.SetActive(false);
-        endScreen.gameObject.SetActive(true);
-        endScreen.ShowFinalScore();
-        loadingCanvas.SetActive(false);
-    }
-
     public void ShowLoadingSceen()
     {
         quiz.gameObject.SetActive(false);
