@@ -59,22 +59,25 @@ public class Quiz : MonoBehaviour
     private Color baseColor;
     private bool isGeneratingQuestions = false;
 
+    // ✅ 자동 해설 중복 방지 플래그
+    private bool solutionShown = false;
+
     private static readonly string[] FALLBACK_CORRECT = new[]
     {
-        "멋지다! \n계속 가자! ",
-        "완벽해! \n감 잡았어! ",
-        "굿샷! \n다음도 기대해! ",
+        "멋지다!\n계속 가보자!",
+        "완벽해!\n이대로 가자!",
+        "좋았어!\n다음도 기대할게!",
     };
 
     private static readonly string[] FALLBACK_WRONG = new[]
     {
-        "괜찮아, \n다음에 맞추자! ",
-        "한 번 삐끗! \n다시 가자! ",
-        "조금만 더! \n할 수 있어! ",
+        "괜찮아,\n실수 할 수 있어.",
+        "한 번 삐끗!\n힘 내보자!",
+        "조금만 더!\n할 수 있어!",
     };
 
-    private System.Random rng = new System.Random();
     private string PickRandom(string[] arr) => arr[rng.Next(arr.Length)];
+    private System.Random rng = new System.Random();
 
     void Awake()
     {
@@ -190,7 +193,8 @@ public class Quiz : MonoBehaviour
             }
         }
 
-        if (!timer.isProblemTime && !chooseAnswer)
+        // ⛔ 한 번만 자동 해설 실행
+        if (!timer.isProblemTime && !chooseAnswer && !solutionShown)
         {
             DisplaySolution(-1);
         }
@@ -204,7 +208,8 @@ public class Quiz : MonoBehaviour
             return;
         }
 
-        // 힌트 초기화
+        // 새 문제 시작 → 해설 초기화
+        solutionShown = false;
         hintShown = false;
         if (hintText != null) hintText.gameObject.SetActive(false);
         if (hintButton != null) hintButton.gameObject.SetActive(true);
@@ -256,16 +261,19 @@ public class Quiz : MonoBehaviour
 
     public void OnAnswerButtonClicked(int index)
     {
+        if (solutionShown) return; // 중복 클릭 방지
         chooseAnswer = true;
         DisplaySolution(index);
         timer.CancelTimer();
         SetButtonState(false);
-
         scoreText.text = $"점수: {scoreKeeper.CalculateScore()}점";
     }
 
     private void DisplaySolution(int index)
     {
+        if (solutionShown) return; // 자동 해설 중복 방지
+        solutionShown = true;
+
         bool isCorrect = (index == currentQuestion.GetCorrectAnswerIndex());
 
         if (isCorrect)
