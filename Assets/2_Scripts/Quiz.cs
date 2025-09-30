@@ -113,10 +113,9 @@ public class Quiz : MonoBehaviour
         string[] topics = new[]
         {
             "배틀그라운드",
-            "발로란트",
-            "레디 오어 낫",
+            "리그 오브 레전드",
             "마인크래프트",
-            "레드 데드 리뎀션"
+            "GTA5"
         };
         int randomIndex = UnityEngine.Random.Range(0, topics.Length);
         return topics[randomIndex];

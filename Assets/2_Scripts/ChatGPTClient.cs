@@ -58,11 +58,22 @@ public class ChatGPTClient : MonoBehaviour
 
     private void Awake()
     {
-        apiKey = LoadFromResources();
-        Debug.Log("Loaded API Key from Resources: " + apiKey);
+        apiKey = LoadApiKey();
+        Debug.Log($"Loaded API Key (masked): {Mask(apiKey)}");
+
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            Debug.LogError("OpenAI API Key가 비어 있습니다. PlayerPrefs/Resources/config/환경변수를 확인하세요.");
+        }
     }
-    private string LoadFromResources()
+
+    private string LoadApiKey()
     {
+        // 1) PlayerPrefs
+        var key = PlayerPrefs.GetString("OpenAI_API_Key", string.Empty);
+        if (!string.IsNullOrEmpty(key)) return key.Trim();
+
+        // 2) Resources/config (예: Assets/Resources/config.txt)
         try
         {
             TextAsset configFile = Resources.Load<TextAsset>("config");
@@ -83,8 +94,20 @@ public class ChatGPTClient : MonoBehaviour
             Debug.LogWarning($"Resources 설정 파일 로드 실패: {e.Message}");
         }
 
-        return "";
+        // 3) 환경변수
+        key = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        if (!string.IsNullOrEmpty(key)) return key.Trim();
+
+        return string.Empty;
     }
+
+    private string Mask(string key)
+    {
+        if (string.IsNullOrEmpty(key)) return "(empty)";
+        if (key.Length <= 8) return $"{key[0]}***{key[^1]}";
+        return $"{key.Substring(0, 4)}***{key.Substring(key.Length - 4)}";
+    }
+
 
     public void GenerateQuizQuestions(int count = 3, string topic = "일반상식")
     {
