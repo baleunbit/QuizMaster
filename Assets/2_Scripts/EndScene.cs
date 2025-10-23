@@ -13,11 +13,11 @@ public class EndScene : MonoBehaviour
         scoreText.text = $"최종 점수: {finalScore}점";
 
         // ✅ 점수 구간에 따른 등급 판정
-        if (finalScore >= 30)
+        if (finalScore >= 50)
             rankText.text = "당신은 고수 입니다.";
-        else if (finalScore >= 20)
+        else if (finalScore >= 40)
             rankText.text = "당신은 중수 입니다.";
-        else if (finalScore >= 10)
+        else if (finalScore >= 30)
             rankText.text = "당신은 하수 입니다.";
         else
             rankText.text = "점수가 너무 낮아요... 다시 도전!";

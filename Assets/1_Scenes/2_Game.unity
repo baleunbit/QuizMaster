@@ -4141,10 +4141,10 @@ MonoBehaviour:
   solutionTimerSprite: {fileID: -5384725055999689231, guid: c02a1fa026d17924cbcbbdf43e628299, type: 3}
   timerText: {fileID: 281861967}
   scoreText: {fileID: 526506254}
-  scoreKeeper: {fileID: 0}
+  scoreKeeper: {fileID: 1157415466}
   progressBar: {fileID: 1757449134}
   chatGPTClient: {fileID: 1837576051}
-  questionCount: 3
+  questionCount: 5
   loadingText: {fileID: 350927448}
   hintButton: {fileID: 561389879}
   hintText: {fileID: 1601501617}

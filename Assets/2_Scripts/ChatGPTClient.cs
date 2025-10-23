@@ -323,7 +323,6 @@ public class ChatGPTClient : MonoBehaviour
         return questionSOs;
     }
 
-
     public void SetApiKey(string key)
     {
         apiKey = key;
