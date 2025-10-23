@@ -50,11 +50,11 @@ public class Quiz : MonoBehaviour
     [Header("Speed Scoring")]
     [SerializeField, Range(0f, 1f)] float fastThreshold = 0.66f;
     [SerializeField, Range(0f, 1f)] float midThreshold = 0.33f;
-    [SerializeField] int fastPoints = 7;
-    [SerializeField] int midPoints = 5;
-    [SerializeField] int slowPoints = 3;
+    [SerializeField] int fastPoints = 5;
+    [SerializeField] int midPoints = 3;
+    [SerializeField] int slowPoints = 2;
 
-    [SerializeField] int maxQuestions = 5;
+    [SerializeField] int maxQuestions = 15;
     private int askedCount = 0;
     private Color baseColor;
     private bool isGeneratingQuestions = false;

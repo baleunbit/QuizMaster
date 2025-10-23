@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Text.RegularExpressions;
 
 [Serializable]
 public class ChatGPTRequest
 {
     public string model = "gpt-4.1-nano";
     public Message[] messages;
-    public float temperature = 1.1f;
-    public int max_completion_tokens = 4000;
+    public float temperature = 1.0f;
+    public int max_tokens = 400;
 }
 
 [Serializable]
@@ -199,6 +200,18 @@ public class ChatGPTClient : MonoBehaviour
                         jsonContent = jsonContent.Substring(0, jsonContent.Length - 3);
                     }
                     jsonContent = jsonContent.Trim();
+
+                    // ✅ 여러 개의 { "questions": [...] } 블록이 붙어서 올 때 하나로 병합
+                    var matches = Regex.Matches(jsonContent, "\"questions\"\\s*:\\s*\\[(.*?)\\]", RegexOptions.Singleline);
+                    if (matches.Count > 1)
+                    {
+                        var parts = new List<string>();
+                        foreach (Match m in matches)
+                        {
+                            parts.Add(m.Groups[1].Value.Trim());
+                        }
+                        jsonContent = "{ \"questions\": [" + string.Join(",", parts) + "] }";
+                    }
 
                     QuizData quizData = JsonUtility.FromJson<QuizData>(jsonContent);
                     List<QuestionSO> generatedQuestions = CreateQuestionSOs(quizData.questions);

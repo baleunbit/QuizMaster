@@ -4151,10 +4151,10 @@ MonoBehaviour:
   cheerText: {fileID: 2135361232}
   fastThreshold: 0.66
   midThreshold: 0.33
-  fastPoints: 7
-  midPoints: 5
-  slowPoints: 3
-  maxQuestions: 5
+  fastPoints: 5
+  midPoints: 3
+  slowPoints: 2
+  maxQuestions: 15
 --- !u!1 &2106443005
 GameObject:
   m_ObjectHideFlags: 0
