@@ -53,7 +53,6 @@ public class Quiz : MonoBehaviour
     [SerializeField] int fastPoints = 5;
     [SerializeField] int midPoints = 3;
     [SerializeField] int slowPoints = 2;
-
     [SerializeField] int maxQuestions = 15;
     private int askedCount = 0;
     private Color baseColor;
