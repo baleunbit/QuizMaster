@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BGMManager : MonoBehaviour
+public class BGMMgr : MonoBehaviour
 {
-    public static BGMManager Instance;
+    public static BGMMgr Instance;
 
     [Header("BGM Clips (assign in Inspector)")]
     [SerializeField] AudioClip menuBGM;   // 003
